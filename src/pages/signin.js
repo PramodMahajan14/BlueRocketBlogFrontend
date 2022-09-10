@@ -45,6 +45,7 @@ const SignIn = () => {
       body: JSON.stringify({ email, password }),
     });
     const data = await response.json();
+    localStorage.setItem("cookies", data.refresh_token);
     setloading(false);
     console.log(data);
     localStorage.setItem("firstLogin", true);

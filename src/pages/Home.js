@@ -51,7 +51,7 @@ const Home = () => {
         <Nav />
       </div>
 
-      <Card2 titlemenu="DISCOVER MORE OF WHAT MATTERS TO YOU" />
+      <Card2 titlemenu="DISCOVER MORE OF WHAT MATTERS TO YOu" />
 
       <Footer />
     </>

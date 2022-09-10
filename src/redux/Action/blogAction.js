@@ -15,13 +15,14 @@ export const accesstoken = (token) => {
 };
 
 export const rootinfo = async (token) => {
+  // console.log(token);
   const res = await axios.get(
     `${process.env.REACT_APP_SERVER}/user/myprofile`,
     {
       headers: { Authorization: token },
     }
   );
-
+  console.log(res);
   return res;
 };
 

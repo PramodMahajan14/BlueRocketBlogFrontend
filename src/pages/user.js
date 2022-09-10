@@ -27,10 +27,14 @@ const User = () => {
       `${process.env.REACT_APP_SERVER}/user/refresh_token`,
       null
     );
-    await dispatch(accesstoken(res.data.access_token));
+    console.log(res);
+    const tokenid = localStorage.getItem("cookies");
+    console.log(tokenid);
+    // await dispatch(accesstoken(res.data.access_token));
+    await dispatch(accesstoken(tokenid));
     setloading(false);
   };
-  localStorage.setItem("cookies", Token);
+  // localStorage.setItem("cookies", Token);
 
   useEffect(() => {
     if (openORnot) {
