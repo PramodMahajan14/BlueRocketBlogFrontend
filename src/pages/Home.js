@@ -20,7 +20,6 @@ import Footer from "../components/footer";
 const image =
   "https://images.unsplash.com/photo-1579273166674-bea9b40ba0f7?ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8cGljdHVyZXxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=60";
 const Home = () => {
-  console.log(process.env.REACT_APP_SERVER);
   const userdata = useSelector((state) => state.auser.ruserinfo);
   const Homekey = useSelector((state) => state.auser.isLogged);
   const dispatch = useDispatch();
