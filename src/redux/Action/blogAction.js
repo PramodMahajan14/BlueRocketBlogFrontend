@@ -1,6 +1,7 @@
 import { ActionTypes } from "../contants/blogActionType";
 import axios from "axios";
 
+var current_user = {};
 export const loginuser = () => {
   return {
     type: ActionTypes.LOGIN,
@@ -14,30 +15,50 @@ export const accesstoken = (token) => {
   };
 };
 
-export const rootinfo = async (token) => {
-  // console.log(token);
-  const res = await axios.get(
-    `${process.env.REACT_APP_SERVER}/user/myprofile`,
-    {
-      headers: { Authorization: token },
-    }
-  );
-  console.log(res);
-  return res;
-};
+// export const rootinfo = async (token) => {
+//   try {
+//     const config = {
+//       headers: {
+//         "Content-type": "application/json; charset=UTF-8",
+//         Authorization: token,
+//       },
+//     };
+//     const res = await axios.get(
+//       `${process.env.REACT_APP_SERVER}/user/myprofile`,
+//       config
+//     );
+//     // fetch(`${process.env.REACT_APP_SERVER}/user/myprofile`, {
+//     //   method: "GET",
+//     //   headers: {
+//     //     "Content-type": "application/json; charset=UTF-8",
+//     //     Authorization: token,
+//     //   },
+//     // })
+//     //   .then((response) => response.json())
+//     //   .then((data) => {
+//     //     data;
+//     //   })
+//     //   .catch((err) => {
+//     //     console.log(err.message);
+//     //   });
+//     console.log(res.data);
+//   } catch (err) {
+//     console.log(err);
+//   }
+// };
 
 export const allinfo = async () => {
   const res = await axios.get(`${process.env.REACT_APP_SERVER}/user/profile`);
   return res;
-  // console.log(res)
 };
 
 export const rootinfoDetail = (res) => {
+  console.log(res);
   return {
     type: ActionTypes.GET_ROOTINFO,
     payload: {
       ruserinfo: res.data,
-      rootuser: true,
+      // rootuser: true,
     },
   };
 };

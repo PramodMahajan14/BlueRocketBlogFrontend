@@ -73,6 +73,7 @@ const Newblog = () => {
           headers: { accept: "multipart/form-data", Authorization: Token },
         }
       );
+      // console.log(res.data.url);
       setimgsrc(res.data.url);
       if (res.status == 200) {
         setlod(false);
@@ -104,6 +105,7 @@ const Newblog = () => {
         toast.error("Please Login first", { position: "bottom-left" }),
         setloading(false)
       );
+
     e.preventDefault();
     post.title = ptitle;
     post.ptype = posttype;
@@ -122,30 +124,39 @@ const Newblog = () => {
       user_avatar,
     } = post;
     try {
-      const response = await fetch("/user/create_post", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          title,
-          body,
-          image,
-          description,
-          purl,
-          ptype,
-          user_id,
-          user_avatar,
-        }),
-      });
-      console.log(response);
-      const data = response.json();
-      if (data.status === 200) {
-        toast.error("Your post successfully created.", {
-          position: "top-center",
+      const response = await fetch(
+        `${process.env.REACT_APP_SERVER}/user/create_post`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            title,
+            body,
+            image,
+            description,
+            purl,
+            ptype,
+            user_id,
+            user_avatar,
+          }),
+        }
+      )
+        .then((response) => response.json())
+        .then((resp) => {
+          toast.success("Your post successfully created.", {
+            position: "top-center",
+          });
+          setloading(false);
+          e.preventDefault();
+          hist.push("/user");
+        })
+        .catch((err) => {
+          toast.error("Something wrong !.", {
+            position: "top-center",
+          });
         });
-        setloading(false);
-      }
 
       setloading(false);
     } catch (err) {

@@ -11,7 +11,7 @@ import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import usePagination from "./pagination";
 import pic from "../Images/empty.png";
-
+// import "../css/signup.css";
 const Card2 = (props) => {
   const data = useSelector((state) => state.allblogs.blogs);
   const [blogs, setblogs] = useState(data);
@@ -167,7 +167,7 @@ const Card2 = (props) => {
             return (
               <>
                 <div
-                  className=" container"
+                  className="container"
                   style={{
                     display: "flex",
                     minWidth: "70%",

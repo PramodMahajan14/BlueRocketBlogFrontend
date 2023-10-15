@@ -6,57 +6,82 @@ import Card2 from "../components/blogcard";
 import { useHistory } from "react-router";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-
+import Cookies from "js-cookie";
 import {
   rootinfo,
   rootinfoDetail,
   accesstoken,
+  getallpost,
+  setblogs,
 } from "../redux/Action/blogAction";
 import "../css/error.css";
 
 const User = () => {
   const [loading, setloading] = useState(false);
-  const openORnot = useSelector((state) => state.auser.isLogged);
+  // const openORnot = useSelector((state) => state.auser.isLogged);
   const Token = useSelector((state) => state.tokenuser);
+  const blogs = useSelector((state) => state.allblogs.blogs);
   const dispatch = useDispatch();
   const hist = useHistory();
-
+  console.log(blogs);
   const gettingtoken = async () => {
+    const token = Cookies.get("refreshtoken");
     setloading(true);
-    const res = await axios.post(
-      `${process.env.REACT_APP_SERVER}/user/refresh_token`,
-      null
-    );
-    console.log(res);
-    const tokenid = localStorage.getItem("cookies");
-    console.log(tokenid);
-    // await dispatch(accesstoken(res.data.access_token));
-    await dispatch(accesstoken(tokenid));
-    setloading(false);
+    fetch(`${process.env.REACT_APP_SERVER}/user/refresh_token`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        Authorization: token,
+      },
+    })
+      .then((response) => response.json())
+      .then((access) => {
+        console.log("AccessToken : ", access);
+        dispatch(accesstoken(access.access_token));
+        setloading(false);
+        // rootinfo(access.access_token);
+
+        // fetch(`${process.env.REACT_APP_SERVER}/user/myprofile`, {
+        //   method: "GET",
+        //   headers: {
+        //     "Content-type": "application/json; charset=UTF-8",
+        //     Authorization: access.access_token,
+        //   },
+        // })
+        //   .then((response) => response.json())
+        //   .then((resp) => {
+        //     console.log(resp);
+
+        //     dispatch(rootinfoDetail(resp));
+        //   })
+        //   .catch((err) => {
+        //     console.log(err.message);
+        //   });
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
   };
-  // localStorage.setItem("cookies", Token);
+  const getting_all_blog = async () => {
+    const res = await getallpost();
+    dispatch(setblogs(res));
+  };
 
   useEffect(() => {
-    if (openORnot) {
+    if (Cookies.get("refreshtoken")) {
       gettingtoken();
-      // gettingdata();
+      getting_all_blog();
     } else if (localStorage.getItem("cookies")) {
     } else hist.push("/");
-  }, [openORnot.isLogged]);
+  }, []);
 
   const token = localStorage.getItem("cookies");
 
-  //  useEffect(()=>{
-
-  //      gettingdata();
-
-  //  },[])
-
-  const gettingdata = async () => {
-    const res = await rootinfo(token);
-    dispatch(rootinfoDetail(res));
-  };
-  gettingdata();
+  // const gettingdata = async () => {
+  //   const res = await rootinfo(token);
+  //   dispatch(rootinfoDetail(res));
+  // };
+  // gettingdata();
   return (
     <>
       <Nav2 />
@@ -75,7 +100,7 @@ const User = () => {
       )}
 
       <div className="container footer">
-        <p> copyright BlueRocket | terms and coditions </p>
+        <p> copyright BlueRocket | terms and conditions </p>
       </div>
     </>
   );

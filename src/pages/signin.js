@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import "../../node_modules/semantic-ui-css";
 import "./login_f.css";
+import Cookies from "js-cookie";
 // import '../css/signup.css'
 // import '../index.css'
 import "../css/socialLogin.scss";
 import pic2 from "../Images/pic2.svg";
 import { useHistory } from "react-router";
 import { useDispatch } from "react-redux";
-import { loginuser } from "../redux/Action/blogAction";
+// import { loginuser } from "../redux/Action/blogAction";
 import locket from "../css/loginform_logo.svg";
 import { Link } from "react-router-dom";
 import { GoogleLogin } from "react-google-login";
@@ -45,19 +46,23 @@ const SignIn = () => {
       body: JSON.stringify({ email, password }),
     });
     const data = await response.json();
-    localStorage.setItem("cookies", data.refresh_token);
-    setloading(false);
-    console.log(data);
-    localStorage.setItem("firstLogin", true);
+    if (Cookies.get("refreshtoken")) {
+      Cookies.remove("refreshtoken");
+      Cookies.set("refreshtoken", data.refresh_token);
+    } else {
+      Cookies.set("refreshtoken", data.refresh_token);
+    }
+
     if (data.statuscode === 200) {
-      dispatch(loginuser());
+      // dispatch(loginuser());
       hist.push("/user");
     } else {
       myresponse = data.msg;
-
+      setloading(false);
       setmessage(false);
     }
   };
+
   const hidemessage = () => {
     setmessage(true);
   };
@@ -70,7 +75,7 @@ const SignIn = () => {
       localStorage.setItem("firstLogin", true);
       console.log(resp);
       if (resp.status === 200) {
-        dispatch(loginuser());
+        // dispatch(loginuser());
         hist.push("/user");
       }
       hist.push("/user");
