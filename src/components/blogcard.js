@@ -11,7 +11,7 @@ import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import usePagination from "./pagination";
 import pic from "../Images/empty.png";
-// import "../css/signup.css";
+import Loader from "./Loader";
 const Card2 = (props) => {
   const data = useSelector((state) => state.allblogs.blogs);
   const [blogs, setblogs] = useState(data);
@@ -20,6 +20,7 @@ const Card2 = (props) => {
   const [productPerPage, setProductPerPage] = useState(4);
   const [searchInput, setSearchInput] = useState("");
   const [filteredResults, setFilteredResults] = useState([]);
+  const [Loading, setLoading] = useState(true);
   useEffect(() => {
     if (window.innerWidth <= 768) {
       setIsMobile(true);
@@ -27,6 +28,9 @@ const Card2 = (props) => {
       setIsMobile(false);
     }
   });
+  setTimeout(() => {
+    setLoading(false);
+  }, 15000);
 
   const indexOfLastProduct = currentpage * productPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productPerPage;
@@ -358,21 +362,8 @@ const Card2 = (props) => {
           </div>
 
           <div className="col-xs-12 col-sm-7" style={{ overflow: "auto" }}>
-            {/* search filter */}
-            {/* <div className="form_group has_search">
-              <span className="searchicon">
-                <AiOutlineSearch />
-              </span>
-              <input
-                type="text"
-                className="form_control"
-                placeHolder="Search"
-                onChange={(e) => searchItems(e.target.value)}
-              />
-            </div> */}
-
             {maincard}
-            <Cards />
+            {Loading ? <Loader /> : <Cards />}
             <div className="pagination">
               <Stack spacing={2}>
                 <Pagination
@@ -396,6 +387,7 @@ const Card2 = (props) => {
     </>
   );
 };
+
 export default Card2;
 
 // w=12.5rem
